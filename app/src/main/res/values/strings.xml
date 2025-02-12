@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Weather App</string>
+    <string name="local_weather">Local Weather</string>
+    <string name="favourites">Favourite Places</string>
 </resources>
