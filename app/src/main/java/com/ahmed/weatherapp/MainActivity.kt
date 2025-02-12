@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.ahmed.weatherapp.navigation.AppNavigation
 import com.ahmed.weatherapp.navigation.Screens
 import com.ahmed.weatherapp.ui.theme.WeatherAppTheme
 
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-                MainContent()
+                AppNavigation()
             }
         }
     }
