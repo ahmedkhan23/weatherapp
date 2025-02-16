@@ -3,6 +3,7 @@ package com.ahmed.weatherapp.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,7 +26,12 @@ fun AppNavigation() {
             LaunchedEffect("key1") {
                 scope.launch {
                     delay(3000L)
-                    navController.navigate(Screens.LandingPage.route)
+                    navController.navigate(Screens.LandingPage.route) {
+                        popUpTo(Screens.SplashScreen.route) {
+                            inclusive = true
+                        }
+                    }
+
                 }
             }
         }
