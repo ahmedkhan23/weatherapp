@@ -2,4 +2,8 @@
     <string name="app_name">Weather App</string>
     <string name="local_weather">Local Weather</string>
     <string name="favourites">Favourite Places</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="location_permission_rationale">This app requires the location permission to function.</string>
+    <string name="grant_access">Grant Access</string>
+    <string name="cancel">Cancel</string>
 </resources>

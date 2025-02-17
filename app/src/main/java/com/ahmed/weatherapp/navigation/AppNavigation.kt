@@ -1,15 +1,11 @@
 package com.ahmed.weatherapp.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ahmed.weatherapp.MainContent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavigation() {
@@ -22,7 +18,8 @@ fun AppNavigation() {
     ) {
 
         composable(Screens.SplashScreen.route) {
-            Splash()
+            Splash(navController)
+            /*
             LaunchedEffect("key1") {
                 scope.launch {
                     delay(3000L)
@@ -33,7 +30,7 @@ fun AppNavigation() {
                     }
 
                 }
-            }
+            }*/
         }
 
         composable(Screens.LandingPage.route) {
