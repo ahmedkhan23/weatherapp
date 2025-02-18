@@ -10,11 +10,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,10 +25,11 @@ import com.ahmed.weatherapp.data.PermissionAction
 
 const val TAG = "PermissionDialog"
 
-fun checkIfPermissionGranted(context: Context, permission: String): Boolean {
-    return (ContextCompat.checkSelfPermission(context, permission)
-            == PackageManager.PERMISSION_GRANTED)
+@Composable
+fun rememberIfPermissionGranted(context: Context, permission: String): MutableState<Boolean> {
+    return remember { mutableStateOf(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED)  }
 }
+
 fun shouldShowPermissionRationale(context: Context, permission: String): Boolean {
     val activity = context as Activity?
     if (activity == null)
@@ -39,16 +42,18 @@ fun shouldShowPermissionRationale(context: Context, permission: String): Boolean
 
 @Composable
 fun PermissionDialog(
-    context: Context,
     permission: String,
     permissionAction: (PermissionAction) -> Unit
 ) {
 
+    val context = LocalContext.current
+
     // check if the permission has already been granted and if so, invoke the permissionAction fun
     // accordingly and return as we have nothing more to do
-    if (checkIfPermissionGranted(context, permission)) {
+    val checkIfPermissionGranted by rememberIfPermissionGranted(context, permission)
+
+    if (checkIfPermissionGranted) {
         permissionAction(PermissionAction.PermissionGranted)
-        return
     }
 
     // create a Permissions launcher that will be used later based on logic flow of whether
