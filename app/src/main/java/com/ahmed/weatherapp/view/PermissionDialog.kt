@@ -69,7 +69,7 @@ fun PermissionDialog(
     var notShownYet by remember { mutableStateOf(true) }
 
     if ((showPermissionRationale && !isDialogDismissed) ||
-        (!isDialogDismissed && !notShownYet)) {
+        (!isDialogDismissed && notShownYet)) {
 
         //dialog shows
         notShownYet = false

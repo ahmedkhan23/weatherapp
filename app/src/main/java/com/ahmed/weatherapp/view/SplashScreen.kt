@@ -1,7 +1,7 @@
-package com.ahmed.weatherapp.navigation
+package com.ahmed.weatherapp.view
 
 import android.Manifest
-import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,18 +23,21 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.ahmed.weatherapp.MainContent
 import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.data.PermissionAction
-import com.ahmed.weatherapp.view.PermissionDialog
+import com.ahmed.weatherapp.navigation.Screens
 
 
+@Preview()
 @Composable
-fun Splash(navController: NavHostController) {
+fun Splash(navigateToMain: () -> Unit = {},
+           navigateBack: () -> Unit = {}) {
+
+    val TAG = "Splash"
 
     val context = LocalContext.current
-    var showContent by rememberSaveable { mutableStateOf(false) }
+
+//    var showLandingPageContent by rememberSaveable { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()
         .background(Color.Black),
@@ -53,6 +56,8 @@ fun Splash(navController: NavHostController) {
 
     }
 
+    Log.d(TAG,"")
+
     // location permissions flow
     PermissionDialog(context,
         permission = Manifest.permission.ACCESS_FINE_LOCATION,
@@ -60,18 +65,21 @@ fun Splash(navController: NavHostController) {
 
             when (permissionAction) {
                 is PermissionAction.PermissionGranted -> {
-                    showContent = true
+                    navigateToMain()
                 }
+
                 is PermissionAction.PermissionDenied -> {
-                    showContent = false
+                    navigateBack()
                 }
             }
         })
 
-    if (showContent) {
-        MainContent()
-    }
-    else {
-        navController.popBackStack(Screens.SplashScreen.route, inclusive = true)
-    }
+
+//    if (showLandingPageContent) {
+//        Log.d(TAG, " navigating to main")
+//        navigateToMain()
+//    }
+//    else {
+//        navigateBack()
+//    }
 }

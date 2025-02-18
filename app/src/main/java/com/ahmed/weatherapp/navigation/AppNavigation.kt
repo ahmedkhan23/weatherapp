@@ -1,16 +1,20 @@
 package com.ahmed.weatherapp.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ahmed.weatherapp.MainContent
+import com.ahmed.weatherapp.view.Splash
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -18,7 +22,19 @@ fun AppNavigation() {
     ) {
 
         composable(Screens.SplashScreen.route) {
-            Splash(navController)
+            Splash(
+                navigateToMain = {
+                navController.navigate(Screens.LandingPage.route)  {
+                    popUpTo(Screens.SplashScreen.route) {
+                        inclusive = true
+                    }
+                }
+                }, navigateBack = {
+                    navController.popBackStack(Screens.SplashScreen.route, inclusive = true)
+                    if (context is Activity) {
+                        context.finish()
+                    }
+                })
             /*
             LaunchedEffect("key1") {
                 scope.launch {
