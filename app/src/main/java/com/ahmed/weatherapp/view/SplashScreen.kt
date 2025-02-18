@@ -33,8 +33,6 @@ import com.ahmed.weatherapp.navigation.Screens
 fun Splash(navigateToMain: () -> Unit = {},
            navigateBack: () -> Unit = {}) {
 
-    val TAG = "Splash"
-
     val context = LocalContext.current
 
 //    var showLandingPageContent by rememberSaveable { mutableStateOf(false) }
@@ -52,11 +50,7 @@ fun Splash(navigateToMain: () -> Unit = {},
         CircularProgressIndicator(modifier = Modifier.size(25.dp),
             colorResource(R.color.black),
             strokeWidth = 3.dp)
-
-
     }
-
-    Log.d(TAG,"")
 
     // location permissions flow
     PermissionDialog(context,
@@ -73,13 +67,4 @@ fun Splash(navigateToMain: () -> Unit = {},
                 }
             }
         })
-
-
-//    if (showLandingPageContent) {
-//        Log.d(TAG, " navigating to main")
-//        navigateToMain()
-//    }
-//    else {
-//        navigateBack()
-//    }
 }

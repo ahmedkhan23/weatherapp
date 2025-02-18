@@ -1,6 +1,7 @@
 package com.ahmed.weatherapp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,11 +34,15 @@ import com.ahmed.weatherapp.navigation.Screens
 import com.ahmed.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    val TAG = MainActivity::class.java.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
+                Log.d(TAG, " going to AppNavigation")
                 AppNavigation()
             }
         }
