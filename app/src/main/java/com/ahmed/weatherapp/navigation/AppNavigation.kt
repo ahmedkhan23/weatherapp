@@ -22,14 +22,14 @@ fun AppNavigation() {
     val context = LocalContext.current
     val navController = rememberNavController()
 
-    /** TODO - understand why this state is required
+    /** TODO - understand why this state is required and remove commented code
      * background info: navigatedToMain is added here because after
      * location flow takes place without this navigatedToMain and subsequent
      * check to compose Splash composable - for some reason Splash composable
      * was being invoked several times - in an indefinite loop
      * this state allows to get around this issue - however root cause needs to be known
      */
-    var navigatedToMain by remember { mutableStateOf(false) }
+//    var navigatedToMain by remember { mutableStateOf(false) }
 
     NavHost(
         navController = navController,
@@ -37,14 +37,14 @@ fun AppNavigation() {
     ) {
 
         composable(Screens.SplashScreen.route) {
-            if (!navigatedToMain) {
+//            if (!navigatedToMain) {
                 Splash(
                     navigateToMain = {
                         navController.navigate(Screens.LandingPage.route)  {
                             popUpTo(Screens.SplashScreen.route) {
                                 inclusive = true
                             }
-                            navigatedToMain = true
+//                            navigatedToMain = true
                         }
                     }, navigateBack = {
                         navController.popBackStack(Screens.SplashScreen.route, inclusive = true)
@@ -52,7 +52,7 @@ fun AppNavigation() {
                             context.finish()
                         }
                     })
-            }
+//            }
 
             /*
             LaunchedEffect("key1") {

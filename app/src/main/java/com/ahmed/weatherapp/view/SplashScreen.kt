@@ -12,6 +12,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,7 +36,7 @@ fun Splash(navigateToMain: () -> Unit = {},
 
     val context = LocalContext.current
 
-//    var showLandingPageContent by rememberSaveable { mutableStateOf(false) }
+    var navigatedToMain by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()
         .background(Color.Black),
@@ -59,7 +60,10 @@ fun Splash(navigateToMain: () -> Unit = {},
 
             when (permissionAction) {
                 is PermissionAction.PermissionGranted -> {
-                    navigateToMain()
+                    if (!navigatedToMain) {
+                        navigateToMain()
+                        navigatedToMain = true
+                    }
                 }
 
                 is PermissionAction.PermissionDenied -> {
