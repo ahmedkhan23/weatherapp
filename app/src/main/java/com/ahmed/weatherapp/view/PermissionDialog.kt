@@ -27,7 +27,10 @@ const val TAG = "PermissionDialog"
 
 @Composable
 fun rememberIfPermissionGranted(context: Context, permission: String): MutableState<Boolean> {
-    return remember { mutableStateOf(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED)  }
+    return remember {
+        mutableStateOf(ContextCompat.checkSelfPermission(context, permission)
+                == PackageManager.PERMISSION_GRANTED)
+    }
 }
 
 fun shouldShowPermissionRationale(context: Context, permission: String): Boolean {
