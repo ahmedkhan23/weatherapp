@@ -21,9 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.ahmed.weatherapp.R
+import com.ahmed.weatherapp.TAG
 import com.ahmed.weatherapp.data.PermissionAction
-
-const val TAG = "PermissionDialog"
 
 @Composable
 fun rememberIfPermissionGranted(context: Context, permission: String): MutableState<Boolean> {
@@ -35,8 +34,6 @@ fun rememberIfPermissionGranted(context: Context, permission: String): MutableSt
 
 fun shouldShowPermissionRationale(context: Context, permission: String): Boolean {
     val activity = context as Activity?
-    if (activity == null)
-        Log.d(TAG, "Activity is null")
     return ActivityCompat.shouldShowRequestPermissionRationale(
         activity!!,
         permission
@@ -57,9 +54,10 @@ fun PermissionDialog(
 
     if (checkIfPermissionGranted) {
         permissionAction(PermissionAction.PermissionGranted)
+        return
     }
 
-    // create a Permissions launcher that will be used later based on logic flow of whether
+    // create a Permissions launcher that *will be used later* based on logic flow of whether
     // or not we need to request permissions - result is captured with permissionAction
     val permissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -71,6 +69,7 @@ fun PermissionDialog(
         }
     }
 
+    Log.d(TAG, " just putting this out there to see for recomposition 1")
 
     val showPermissionRationale = shouldShowPermissionRationale(context, permission)
     var isDialogDismissed by remember { mutableStateOf(false) }
@@ -79,8 +78,9 @@ fun PermissionDialog(
     if ((showPermissionRationale && !isDialogDismissed) ||
         (!isDialogDismissed && notShownYet)) {
 
-        //dialog shows
         notShownYet = false
+
+        Log.d(TAG, " just putting this out there to see for recomposition 2")
 
         AlertDialog(
             onDismissRequest = {
@@ -93,6 +93,7 @@ fun PermissionDialog(
                 Button(
                     onClick = {
                         isDialogDismissed = true
+                        Log.d(TAG, " launching permissions 1")
                         permissionsLauncher.launch(permission)
                     }
                 ) {
@@ -114,6 +115,7 @@ fun PermissionDialog(
     else {
         if (!isDialogDismissed) {
             SideEffect {
+                Log.d(TAG, " launching permissions 2")
                 permissionsLauncher.launch(permission)
             }
         }

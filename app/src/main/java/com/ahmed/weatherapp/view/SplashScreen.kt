@@ -1,6 +1,7 @@
 package com.ahmed.weatherapp.view
 
 import android.Manifest
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ahmed.weatherapp.R
+import com.ahmed.weatherapp.TAG
 import com.ahmed.weatherapp.data.PermissionAction
 
 
@@ -40,6 +42,8 @@ fun Splash(navigateToMain: () -> Unit = {},
             colorResource(R.color.black),
             strokeWidth = 3.dp)
     }
+
+    Log.d(TAG, "about to launch permission dialog")
 
     // location permissions flow
     PermissionDialog(
