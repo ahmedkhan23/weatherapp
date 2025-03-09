@@ -3,6 +3,7 @@ package com.ahmed.weatherapp.view
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,7 +23,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.TAG
+import com.ahmed.weatherapp.data.LocationViewModel
 import com.ahmed.weatherapp.data.PermissionAction
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun rememberIfPermissionGranted(context: Context, permission: String): MutableState<Boolean> {
