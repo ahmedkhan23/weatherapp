@@ -2,8 +2,6 @@ package com.ahmed.weatherapp.view
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Location
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,7 +9,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,20 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.TAG
-import com.ahmed.weatherapp.data.LocationViewModel
 import com.ahmed.weatherapp.data.PermissionAction
-import org.koin.androidx.compose.koinViewModel
-
-@Composable
-fun rememberIfPermissionGranted(context: Context, permission: String): MutableState<Boolean> {
-    return remember {
-        mutableStateOf(ContextCompat.checkSelfPermission(context, permission)
-                == PackageManager.PERMISSION_GRANTED)
-    }
-}
 
 fun shouldShowPermissionRationale(context: Context, permission: String): Boolean {
     val activity = context as Activity?
@@ -51,15 +37,6 @@ fun PermissionDialog(
 
     val context = LocalContext.current
 
-    // check if the permission has already been granted and if so, invoke the permissionAction fun
-    // accordingly and return as we have nothing more to do
-    val checkIfPermissionGranted by rememberIfPermissionGranted(context, permission)
-
-    if (checkIfPermissionGranted) {
-        permissionAction(PermissionAction.PermissionGranted)
-        return
-    }
-
     // create a Permissions launcher that *will be used later* based on logic flow of whether
     // or not we need to request permissions - result is captured with permissionAction
     val permissionsLauncher = rememberLauncherForActivityResult(
@@ -72,7 +49,7 @@ fun PermissionDialog(
         }
     }
 
-    Log.d(TAG, " just putting this out there to see for recomposition 1")
+    Log.d(TAG, " just putting this out there to see for recomposition - log msg 1")
 
     val showPermissionRationale = shouldShowPermissionRationale(context, permission)
     var isDialogDismissed by remember { mutableStateOf(false) }
@@ -83,7 +60,7 @@ fun PermissionDialog(
 
         notShownYet = false
 
-        Log.d(TAG, " just putting this out there to see for recomposition 2")
+        Log.d(TAG, " just putting this out there to see for recomposition - log msg 2")
 
         AlertDialog(
             onDismissRequest = {
@@ -96,7 +73,7 @@ fun PermissionDialog(
                 Button(
                     onClick = {
                         isDialogDismissed = true
-                        Log.d(TAG, " launching permissions 1")
+                        Log.d(TAG, " launching permissions - 1")
                         permissionsLauncher.launch(permission)
                     }
                 ) {
@@ -118,7 +95,7 @@ fun PermissionDialog(
     else {
         if (!isDialogDismissed) {
             SideEffect {
-                Log.d(TAG, " launching permissions 2")
+                Log.d(TAG, " launching permissions - 2")
                 permissionsLauncher.launch(permission)
             }
         }

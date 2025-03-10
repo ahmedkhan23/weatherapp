@@ -1,9 +1,12 @@
 package com.ahmed.weatherapp.navigation
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,16 +19,21 @@ fun AppNavigation() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val navController = rememberNavController()
+    var splashShown by remember { mutableStateOf(false) }
 
     NavHost(
         navController = navController,
         startDestination = Screens.SplashScreen.route
     ) {
 
+
         composable(Screens.SplashScreen.route) {
+
+            if (!splashShown) {
+                splashShown = true
                 Splash(
                     navigateToMain = {
-                        navController.navigate(Screens.LandingPage.route)  {
+                        navController.navigate(Screens.LandingPage.route) {
                             popUpTo(Screens.SplashScreen.route) {
                                 inclusive = true
                             }
@@ -36,7 +44,7 @@ fun AppNavigation() {
                             context.finish()
                         }
                     })
-
+            }
         }
 
         composable(Screens.LandingPage.route) {
