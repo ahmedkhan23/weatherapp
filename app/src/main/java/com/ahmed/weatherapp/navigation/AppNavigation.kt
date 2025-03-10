@@ -19,7 +19,7 @@ fun AppNavigation() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val navController = rememberNavController()
-    var splashShown by remember { mutableStateOf(false) }
+    var splashShown = false
 
     NavHost(
         navController = navController,
@@ -30,7 +30,6 @@ fun AppNavigation() {
         composable(Screens.SplashScreen.route) {
 
             if (!splashShown) {
-                splashShown = true
                 Splash(
                     navigateToMain = {
                         navController.navigate(Screens.LandingPage.route) {
@@ -44,6 +43,7 @@ fun AppNavigation() {
                             context.finish()
                         }
                     })
+                splashShown = true
             }
         }
 
