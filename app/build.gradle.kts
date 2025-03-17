@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlinx-serialization")
+
 }
 
 val localProperties = Properties()
@@ -20,6 +22,8 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        buildConfigField("String", "WEATHER_API_KEY", "\"$myApiKey\"")
+
         applicationId = "com.ahmed.weatherapp"
         minSdk = 24
         targetSdk = 35
@@ -64,6 +68,8 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.gps)
     implementation(libs.bundles.koin)
+    implementation(libs.bundles.networking)
+    implementation(libs.kotlin.coroutines.play.services)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

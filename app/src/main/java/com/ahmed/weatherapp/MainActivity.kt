@@ -1,5 +1,6 @@
 package com.ahmed.weatherapp
 
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -29,9 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.ahmed.weatherapp.data.LocationViewModel
+import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.ahmed.weatherapp.navigation.AppNavigation
 import com.ahmed.weatherapp.navigation.Screens
 import com.ahmed.weatherapp.ui.theme.WeatherAppTheme
+import org.koin.androidx.compose.koinViewModel
 
 val TAG = "WEATHER_APP"
 
@@ -56,6 +60,13 @@ fun MainContent() {
 
     val context = LocalContext.current
     var currentScreen by remember { mutableStateOf<Screens>(Screens.CurrentWeather) }
+
+    val locationViewModel = koinViewModel<LocationViewModel>()
+
+
+
+
+
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -97,15 +108,18 @@ fun MainContent() {
 
         }) { innerPadding ->
 
-                Column(modifier = Modifier.fillMaxSize()
+                Column(modifier = Modifier
+                    .fillMaxSize()
                     .padding(innerPadding)) {
 
                     if (currentScreen == Screens.CurrentWeather) {
-                        Box(modifier = Modifier.fillMaxSize()
+                        Box(modifier = Modifier
+                            .fillMaxSize()
                             .background(Color.Blue))
                     }
                     else if (currentScreen == Screens.FavouritePlaces){
-                        Box(modifier = Modifier.fillMaxSize()
+                        Box(modifier = Modifier
+                            .fillMaxSize()
                             .background(Color.Red))
                     }
                 }
