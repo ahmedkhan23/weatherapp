@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Weather(
-    val description: String,
-    val icon: String,
-    val id: Int,
-    val main: String
+    val description: String = DUMMY,
+    val icon: String = DUMMY,
+    val id: Int = DUMMY_INT,
+    val main: String = DUMMY
 )

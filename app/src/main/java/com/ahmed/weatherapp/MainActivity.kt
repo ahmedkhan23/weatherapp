@@ -8,13 +8,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,13 +28,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ahmed.weatherapp.data.LocationViewModel
-import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.ahmed.weatherapp.navigation.AppNavigation
 import com.ahmed.weatherapp.navigation.Screens
 import com.ahmed.weatherapp.ui.theme.WeatherAppTheme
@@ -60,13 +65,8 @@ fun MainContent() {
 
     val context = LocalContext.current
     var currentScreen by remember { mutableStateOf<Screens>(Screens.CurrentWeather) }
-
     val locationViewModel = koinViewModel<LocationViewModel>()
-
-
-
-
-
+    val weatherResponse by locationViewModel.locationDataState.collectAsStateWithLifecycle()
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -110,12 +110,21 @@ fun MainContent() {
 
                 Column(modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)) {
+                    .padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)) {
 
                     if (currentScreen == Screens.CurrentWeather) {
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Blue))
+
+                        if (!weatherResponse.updated) {
+                            CircularProgressIndicator()
+                        }
+                        else {
+                            Text(text = weatherResponse.weather.name)
+                            Text(text = "Current Weather: ${weatherResponse.weather.main.temp} degrees Celcius")
+                        }
+
+
                     }
                     else if (currentScreen == Screens.FavouritePlaces){
                         Box(modifier = Modifier
