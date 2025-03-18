@@ -1,6 +1,5 @@
 package com.ahmed.weatherapp
 
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
@@ -24,6 +22,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ahmed.weatherapp.data.LocationViewModel
 import com.ahmed.weatherapp.navigation.AppNavigation
@@ -64,9 +64,15 @@ class MainActivity : ComponentActivity() {
 fun MainContent() {
 
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     var currentScreen by remember { mutableStateOf<Screens>(Screens.CurrentWeather) }
     val locationViewModel = koinViewModel<LocationViewModel>()
-    val weatherResponse by locationViewModel.locationDataState.collectAsStateWithLifecycle()
+    val locationWeatherData by locationViewModel.locationDataState.collectAsStateWithLifecycle()
+
+    DisposableEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(locationViewModel)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(locationViewModel) }
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -116,12 +122,13 @@ fun MainContent() {
 
                     if (currentScreen == Screens.CurrentWeather) {
 
-                        if (!weatherResponse.updated) {
+                        if (!locationWeatherData.updated) {
                             CircularProgressIndicator()
                         }
                         else {
-                            Text(text = weatherResponse.weather.name)
-                            Text(text = "Current Weather: ${weatherResponse.weather.main.temp} degrees Celcius")
+                            Text(text = locationWeatherData.weather.name)
+                            Text(text = locationWeatherData.currentDateTime)
+                            Text(text = "Current Weather: ${locationWeatherData.weather.main.temp} degrees Celcius")
                         }
 
 
