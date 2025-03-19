@@ -2,16 +2,12 @@ package com.ahmed.weatherapp.navigation
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ahmed.weatherapp.MainContent
+import com.ahmed.weatherapp.view.MainContent
 import com.ahmed.weatherapp.view.Splash
 
 @Composable
