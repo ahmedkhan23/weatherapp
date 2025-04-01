@@ -22,7 +22,9 @@ data class WeatherResponse(
     val timezone: Int,
     val visibility: Int,
     val weather: List<Weather> = emptyList(),
-    val wind: Wind = Wind()
+    val wind: Wind = Wind(),
+    val error: Boolean = false,
+    val errorMsg: String = ""
 ) {
     companion object {
         fun dummy(): WeatherResponse {
@@ -39,6 +41,10 @@ data class WeatherResponse(
                 visibility = DUMMY_INT,
                 weather = emptyList()
             )
+        }
+
+        fun error(): WeatherResponse {
+            return dummy().copy(error = true)
         }
     }
 }

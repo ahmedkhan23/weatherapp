@@ -6,4 +6,6 @@
     <string name="location_permission_rationale">This app requires the location permission to function.</string>
     <string name="grant_access">Grant Access</string>
     <string name="cancel">Cancel</string>
+    <string name="location_retrieve_error">Error. Unable to retrieve location.</string>
+    <string name="unknown_error">Unknown Error</string>
 </resources>

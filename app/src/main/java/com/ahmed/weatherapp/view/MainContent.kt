@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ahmed.weatherapp.R
-import com.ahmed.weatherapp.data.LocationViewModel
+import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.ahmed.weatherapp.navigation.Screens
 import org.koin.androidx.compose.koinViewModel
 
@@ -62,7 +62,7 @@ fun MainContent() {
                     onClick = {
                         currentScreen = Screens.CurrentWeather
 
-                        Toast.makeText(context, "currentWeatherSelected", Toast.LENGTH_SHORT).show()
+
                     },
                     label =  { Text(stringResource(R.string.local_weather)) },
                     icon = {
@@ -77,7 +77,7 @@ fun MainContent() {
                     onClick = {
                         currentScreen = Screens.FavouritePlaces
 
-                        Toast.makeText(context, "Favourites Selected", Toast.LENGTH_SHORT).show()
+                        
                     },
                     label =  { Text(stringResource(R.string.favourites)) },
                     icon = {
@@ -103,9 +103,15 @@ fun MainContent() {
                     CircularProgressIndicator()
                 }
                 else {
-                    Text(text = locationWeatherData.weather.name)
-                    Text(text = locationWeatherData.currentDateTime)
-                    Text(text = "Current Weather: ${locationWeatherData.weather.main.temp} degrees Celcius")
+
+                    if(locationWeatherData.weather.error) {
+                        Text(text = locationWeatherData.weather.errorMsg)
+                    }
+                    else {
+                        Text(text = locationWeatherData.weather.name)
+                        Text(text = locationWeatherData.currentDateTime)
+                        Text(text = "Current Weather: ${locationWeatherData.weather.main.temp} degrees Celcius")
+                    }
                 }
 
 

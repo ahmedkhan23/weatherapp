@@ -3,7 +3,9 @@ package com.ahmed.weatherapp.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import com.ahmed.weatherapp.BuildConfig
+import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.TAG
 import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.google.android.gms.location.CurrentLocationRequest
@@ -45,14 +47,32 @@ class LocationWeatherRepositoryImpl(
     }
 
     @SuppressLint("MissingPermission")
-    override suspend fun getCurrentLocationWeather(): WeatherResponse? {
-        val location = fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).await()
-        val weather = weatherAPI.getCurrentWeather(location.latitude.toString(),
-            location.longitude.toString(), BuildConfig.WEATHER_API_KEY)
+    override suspend fun getCurrentLocationWeather(): NetworkResult<WeatherResponse> {
+
+        val location = try {
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).await()
+        } catch (e: Exception) {
+            Log.d(TAG, "unable to retrieve location")
+            return NetworkResult.Error(context.getString(R.string.location_retrieve_error))
+        }
+
+        val weather = try {
+            weatherAPI.getCurrentWeather(location.latitude.toString(),
+                location.longitude.toString(), BuildConfig.WEATHER_API_KEY)
+        } catch (e: Exception) {
+            return NetworkResult.Error("Error ${e.message ?: " unknown"}")
+        }
 
         Log.d(TAG, "weather data recvd $weather")
 
-        return weather.body()
+        return if (weather.isSuccessful) {
+            NetworkResult.Success(weather.body()!!)
+        } else {
+            NetworkResult.Error(weather.errorBody().toString())
+        }
+
+
+
     }
 
 }

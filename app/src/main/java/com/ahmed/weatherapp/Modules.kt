@@ -2,7 +2,7 @@ package com.ahmed.weatherapp
 
 import com.ahmed.weatherapp.data.LocationWeatherRepository
 import com.ahmed.weatherapp.data.LocationWeatherRepositoryImpl
-import com.ahmed.weatherapp.data.LocationViewModel
+import com.ahmed.weatherapp.view.LocationViewModel
 import com.ahmed.weatherapp.data.WeatherAPI
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json

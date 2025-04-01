@@ -1,4 +1,4 @@
-package com.ahmed.weatherapp.data
+package com.ahmed.weatherapp.view
 
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -6,6 +6,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahmed.weatherapp.TAG
+import com.ahmed.weatherapp.data.LocationWeatherRepository
+import com.ahmed.weatherapp.data.NetworkResult
 import com.ahmed.weatherapp.data.model.WeatherResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,12 +27,20 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
 
     private fun getCurrentWeather() {
         viewModelScope.launch(context = Dispatchers.IO) {
-            val weatherResponse = locationRepository.getCurrentLocationWeather()
+            when (val weatherResponse = locationRepository.getCurrentLocationWeather()) {
+                is NetworkResult.Success -> {
 
-            if (weatherResponse != null) {
-                val currentDateTime = getCurrentDateAndTime()
-                locationDataState.update {
-                    it.copy(weather = weatherResponse, updated = true, currentDateTime = currentDateTime)
+                    locationDataState.update {
+                        it.copy(weather = weatherResponse.data, updated = true, currentDateTime = getCurrentDateAndTime())
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    locationDataState.update {
+                        it.copy(weather = WeatherResponse.error().copy(errorMsg = weatherResponse.error, error = true),
+                            updated = true,
+                            currentDateTime = getCurrentDateAndTime())
+                    }
                 }
             }
         }
