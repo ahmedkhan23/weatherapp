@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -77,7 +79,7 @@ fun MainContent() {
                     onClick = {
                         currentScreen = Screens.FavouritePlaces
 
-                        
+
                     },
                     label =  { Text(stringResource(R.string.favourites)) },
                     icon = {
@@ -105,7 +107,10 @@ fun MainContent() {
                 else {
 
                     if(locationWeatherData.weather.error) {
-                        Text(text = locationWeatherData.weather.errorMsg)
+                        Text(modifier = Modifier.wrapContentSize()
+                            .padding(horizontal = 24.dp),
+                            text = locationWeatherData.weather.errorMsg,
+                            textAlign = TextAlign.Center)
                     }
                     else {
                         Text(text = locationWeatherData.weather.name)

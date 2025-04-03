@@ -8,4 +8,10 @@
     <string name="cancel">Cancel</string>
     <string name="location_retrieve_error">Error. Unable to retrieve location.</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="bad_http_request">Bad Request: The server could not understand the request.</string>
+    <string name="unauthorized_check_app_key">Unauthorized: Please check your API key credentials.</string>
+    <string name="no_permissions">Forbidden: You don’t have permission to access this resource.</string>
+    <string name="resource_not_found">Not Found: The requested resource was not found.</string>
+    <string name="internal_server_error">Internal Server Error: Something went wrong on the server.</string>
+    <string name="server_unavailable">Service Unavailable: The server is currently unavailable.</string>
 </resources>

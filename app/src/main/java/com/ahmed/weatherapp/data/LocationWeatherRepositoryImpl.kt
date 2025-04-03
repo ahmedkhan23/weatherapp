@@ -3,7 +3,6 @@ package com.ahmed.weatherapp.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import com.ahmed.weatherapp.BuildConfig
 import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.TAG
@@ -56,23 +55,36 @@ class LocationWeatherRepositoryImpl(
             return NetworkResult.Error(context.getString(R.string.location_retrieve_error))
         }
 
-        val weather = try {
+        val weatherResponse = try {
             weatherAPI.getCurrentWeather(location.latitude.toString(),
                 location.longitude.toString(), BuildConfig.WEATHER_API_KEY)
         } catch (e: Exception) {
             return NetworkResult.Error("Error ${e.message ?: " unknown"}")
         }
 
-        Log.d(TAG, "weather data recvd $weather")
+        Log.d(TAG, "weather data recvd $weatherResponse")
 
-        return if (weather.isSuccessful) {
-            NetworkResult.Success(weather.body()!!)
+        return if (weatherResponse.isSuccessful) {
+            NetworkResult.Success(weatherResponse.body()!!)
         } else {
-            NetworkResult.Error(weather.errorBody().toString())
+
+            NetworkResult.Error(getErrorMsg(weatherResponse.code()))
         }
 
 
 
+    }
+
+    private fun getErrorMsg(code: Int): String {
+        return when (code) {
+            400 -> context.getString(R.string.bad_http_request)
+            401 -> context.getString(R.string.unauthorized_check_app_key)
+            403 -> context.getString(R.string.no_permissions)
+            404 -> context.getString(R.string.resource_not_found)
+            500 -> context.getString(R.string.internal_server_error)
+            503 -> context.getString(R.string.server_unavailable)
+            else -> context.getString(R.string.unknown_error) + " $code"
+        }
     }
 
 }
