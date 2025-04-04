@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.gps)
     implementation(libs.bundles.koin)
+    implementation(libs.coil.compose)
     implementation(libs.bundles.networking)
     implementation(libs.kotlin.coroutines.play.services)
 
