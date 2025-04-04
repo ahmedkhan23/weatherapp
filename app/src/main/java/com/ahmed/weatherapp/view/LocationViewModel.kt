@@ -13,8 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.Locale
 
 class LocationViewModel(private val locationRepository: LocationWeatherRepository) : ViewModel(), DefaultLifecycleObserver {
@@ -31,7 +33,9 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
                 is NetworkResult.Success -> {
 
                     locationDataState.update {
-                        it.copy(weather = weatherResponse.data, updated = true, currentDateTime = getCurrentDateAndTime())
+                        it.copy(weather = weatherResponse.data, updated = true, currentDateTime = getCurrentDateAndTime(),
+                            temp = getFormattedTempCelcius(weatherResponse.data.main.temp)
+                        )
                     }
                 }
 
@@ -57,7 +61,7 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
         Log.d(TAG, "${this@LocationViewModel::class.java.name} onResume")
 
         locationDataState.update {
-            it.copy(weather = WeatherResponse.dummy(), updated = false, currentDateTime = "")
+            it.copy(weather = WeatherResponse.dummy(), updated = false, currentDateTime = FormattedDateAndTime())
         }
         getCurrentWeather()
     }
@@ -67,12 +71,28 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
 data class LocationWeatherData(
     val weather: WeatherResponse = WeatherResponse.dummy(),
     val updated: Boolean = false,
-    var currentDateTime: String = getCurrentDateAndTime()
+    var currentDateTime: FormattedDateAndTime = getCurrentDateAndTime(),
+    var temp: String = getFormattedTempCelcius(weather.main.temp)
 )
 
-fun getCurrentDateAndTime(): String {
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
-        Date())
+fun getCurrentDateAndTime(): FormattedDateAndTime {
 
+    val localDateTime = LocalDateTime.now()
+    val instant = Instant.now()
+
+    val day = localDateTime.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val date = localDateTime.format(DateTimeFormatter.ofPattern("MMMM dd yyyy"))
+    val time = localDateTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
+
+    return FormattedDateAndTime(day, date, time)
+
+}
+
+data class FormattedDateAndTime(
+    val day: String = "", val date: String = "", val time: String = ""
+)
+
+fun getFormattedTempCelcius(temp: Double): String {
+    return String.format(Locale.getDefault(), "%.1f", temp).plus("\u00B0C")
 }
 

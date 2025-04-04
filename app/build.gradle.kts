@@ -45,6 +45,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -70,6 +71,9 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.networking)
     implementation(libs.kotlin.coroutines.play.services)
+
+    coreLibraryDesugaring(libs.desugaring.jdk)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -37,6 +37,7 @@ import com.ahmed.weatherapp.R
 import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.ahmed.weatherapp.navigation.Screens
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 @Preview
 @Composable
@@ -114,8 +115,7 @@ fun MainContent() {
                     }
                     else {
                         Text(text = locationWeatherData.weather.name)
-                        Text(text = locationWeatherData.currentDateTime)
-                        Text(text = "Current Weather: ${locationWeatherData.weather.main.temp} degrees Celcius")
+                        Text(text = locationWeatherData.temp)
                     }
                 }
 
