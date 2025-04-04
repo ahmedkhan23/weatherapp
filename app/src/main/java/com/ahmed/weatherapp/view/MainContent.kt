@@ -1,6 +1,5 @@
 package com.ahmed.weatherapp.view
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,8 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -35,17 +32,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.ahmed.weatherapp.R
-import com.ahmed.weatherapp.data.model.WeatherResponse
 import com.ahmed.weatherapp.navigation.Screens
 import org.koin.androidx.compose.koinViewModel
-import java.util.Locale
 
 @Preview
 @Composable
@@ -122,24 +119,33 @@ fun MainContent() {
                             textAlign = TextAlign.Center)
                     }
                     else {
-                        Text(text = locationWeatherData.weather.name)
-                        Text(text = locationWeatherData.currentDateTime.day.plus(" ${locationWeatherData.currentDateTime.date}")
-                            .plus(" ${locationWeatherData.currentDateTime.time}"))
-                        Row(modifier = Modifier.wrapContentWidth()
-                            .padding(start = 32.dp, end = 32.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.wrapContentSize(),
+                            horizontalAlignment = Alignment.Start) {
 
-                            AsyncImage(
-                                model = locationWeatherData.iconUrl,
-                                contentDescription = null,
-                                modifier = Modifier.height(45.dp).wrapContentWidth(),
-                                contentScale = ContentScale.FillHeight
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = locationWeatherData.temp)
+                            Text(text = locationWeatherData.currentDateTime.day.plus(" ${locationWeatherData.currentDateTime.date}")
+                                .plus(" ${locationWeatherData.currentDateTime.time}"))
+                            Text(text = locationWeatherData.weather.name,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,)
+                            Row(modifier = Modifier.wrapContentWidth(),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically) {
 
+
+                                AsyncImage(
+                                    model = locationWeatherData.iconUrl,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Fit
+                                )
+
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = locationWeatherData.temp,
+                                    fontSize = 22.sp)
+
+                            }
                         }
+
 
                     }
                 }

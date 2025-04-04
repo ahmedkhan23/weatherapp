@@ -17,7 +17,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         Log.d(TAG, "onCreate()")
         setContent {
-            WeatherAppTheme {
+            WeatherAppTheme(darkTheme = false, dynamicColor = false) {
+
                 Log.d(TAG, " going to AppNavigation")
                 AppNavigation()
             }
