@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.bundles.networking)
     implementation(libs.kotlin.coroutines.play.services)
+    implementation(libs.bundles.test)
 
     coreLibraryDesugaring(libs.desugaring.jdk)
 
