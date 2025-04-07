@@ -1,6 +1,7 @@
 package com.ahmed.weatherapp
 
 import com.ahmed.weatherapp.data.WeatherAPI
+import com.google.common.truth.Truth.assertThat
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -46,7 +47,10 @@ class WeatherAPITest {
             lon = "-79.6673382",
             appid = BuildConfig.WEATHER_API_KEY)
 
-        assert(response.isSuccessful)
+//        assert(response.weather)
+
+        assertThat(response.weather).isNotEmpty()
+
     }
 
     @After

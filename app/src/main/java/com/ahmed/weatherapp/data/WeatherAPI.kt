@@ -13,5 +13,5 @@ interface WeatherAPI {
         @Query("lon") lon: String,
         @Query("appid") appid: String,
         @Query("units") units: String = "metric"
-    ): Response<WeatherResponse>
+    ): WeatherResponse
 }

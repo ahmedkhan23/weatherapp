@@ -8,6 +8,7 @@ import java.io.File
 import java.net.HttpURLConnection
 
 class MockRequestDispatcher: Dispatcher() {
+
     override fun dispatch(request: RecordedRequest): MockResponse {
 
         val appId = BuildConfig.WEATHER_API_KEY

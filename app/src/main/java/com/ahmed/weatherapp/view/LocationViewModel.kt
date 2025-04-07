@@ -10,27 +10,30 @@ import com.ahmed.weatherapp.data.LocationWeatherRepository
 import com.ahmed.weatherapp.data.NetworkResult
 import com.ahmed.weatherapp.data.model.Weather
 import com.ahmed.weatherapp.data.model.WeatherResponse
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import mockwebserver3.Dispatcher
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-class LocationViewModel(private val locationRepository: LocationWeatherRepository) : ViewModel(), DefaultLifecycleObserver {
+class LocationViewModel(private val locationRepository: LocationWeatherRepository,
+                        private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel(), DefaultLifecycleObserver {
 
-    init {
-        getCurrentWeather()
-    }
 
     val locationDataState = MutableStateFlow(LocationWeatherData())
 
-    private fun getCurrentWeather() {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            when (val weatherResponse = locationRepository.getCurrentLocationWeather()) {
+    fun getCurrentWeather() {
+        viewModelScope.launch() {
+            when (val weatherResponse = withContext(dispatcher) {
+                locationRepository.getCurrentLocationWeather()
+            }) {
                 is NetworkResult.Success -> {
 
                     locationDataState.update {

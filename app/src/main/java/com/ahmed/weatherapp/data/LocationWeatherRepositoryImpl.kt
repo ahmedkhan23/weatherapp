@@ -55,21 +55,24 @@ class LocationWeatherRepositoryImpl(
             return NetworkResult.Error(context.getString(R.string.location_retrieve_error))
         }
 
-        val weatherResponse = try {
-            weatherAPI.getCurrentWeather(location.latitude.toString(),
+        return try {
+            val weatherResponse = weatherAPI.getCurrentWeather(location.latitude.toString(),
                 location.longitude.toString(), BuildConfig.WEATHER_API_KEY)
+
+            NetworkResult.Success(weatherResponse)
         } catch (e: Exception) {
-            return NetworkResult.Error("Error ${e.message ?: " unknown"}")
+            NetworkResult.Error("Error ${e.message ?: " unknown"}")
         }
 
-        Log.d(TAG, "weather data recvd $weatherResponse")
-
-        return if (weatherResponse.isSuccessful) {
-            NetworkResult.Success(weatherResponse.body()!!)
-        } else {
-
-            NetworkResult.Error(getErrorMsg(weatherResponse.code()))
-        }
+//        Log.d(TAG, "weather data recvd $weatherResponse")
+//
+//
+//        return if (weatherResponse.isSuccessful) {
+//            NetworkResult.Success(weatherResponse.body()!!)
+//        } else {
+//
+//            NetworkResult.Error(getErrorMsg(weatherResponse.code()))
+//        }
 
 
 
