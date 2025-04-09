@@ -13,10 +13,10 @@ import com.ahmed.weatherapp.data.model.WeatherResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import mockwebserver3.Dispatcher
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -27,7 +27,8 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
                         private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel(), DefaultLifecycleObserver {
 
 
-    val locationDataState = MutableStateFlow(LocationWeatherData())
+    private val _locationDataState = MutableStateFlow(LocationWeatherData())
+    val locationDataState = _locationDataState.asStateFlow()
 
     fun getCurrentWeather() {
         viewModelScope.launch() {
@@ -36,7 +37,7 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
             }) {
                 is NetworkResult.Success -> {
 
-                    locationDataState.update {
+                    _locationDataState.update {
                         it.copy(weather = weatherResponse.data, updated = true, currentDateTime = getCurrentDateAndTime(),
                             temp = getFormattedTempCelcius(weatherResponse.data.main.temp),
                             iconUrl = getIconUrl(weatherResponse.data.weather)
@@ -45,7 +46,7 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
                 }
 
                 is NetworkResult.Error -> {
-                    locationDataState.update {
+                    _locationDataState.update {
                         it.copy(weather = WeatherResponse.error().copy(errorMsg = weatherResponse.error, error = true),
                             updated = true,
                             currentDateTime = getCurrentDateAndTime())
@@ -65,7 +66,7 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
         super.onResume(owner)
         Log.d(TAG, "${this@LocationViewModel::class.java.name} onResume")
 
-        locationDataState.update {
+        _locationDataState.update {
             it.copy(weather = WeatherResponse.dummy(), updated = false, currentDateTime = FormattedDateAndTime(), iconUrl = "")
         }
         getCurrentWeather()
