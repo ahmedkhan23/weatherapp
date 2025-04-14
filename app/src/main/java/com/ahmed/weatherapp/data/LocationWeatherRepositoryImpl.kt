@@ -63,19 +63,6 @@ class LocationWeatherRepositoryImpl(
         } catch (e: Exception) {
             NetworkResult.Error("Error ${e.message ?: " unknown"}")
         }
-
-//        Log.d(TAG, "weather data recvd $weatherResponse")
-//
-//
-//        return if (weatherResponse.isSuccessful) {
-//            NetworkResult.Success(weatherResponse.body()!!)
-//        } else {
-//
-//            NetworkResult.Error(getErrorMsg(weatherResponse.code()))
-//        }
-
-
-
     }
 
     private fun getErrorMsg(code: Int): String {

@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +47,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainContent() {
 
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var currentScreen by remember { mutableStateOf<Screens>(Screens.CurrentWeather) }
     val locationViewModel = koinViewModel<LocationViewModel>()
@@ -72,11 +70,12 @@ fun MainContent() {
 
 
                     },
-                    label =  { Text(stringResource(R.string.local_weather)) },
+                    label = { Text(stringResource(R.string.local_weather)) },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
-                            contentDescription = null)
+                            contentDescription = null
+                        )
                     }
                 )
 
@@ -87,11 +86,12 @@ fun MainContent() {
 
 
                     },
-                    label =  { Text(stringResource(R.string.favourites)) },
+                    label = { Text(stringResource(R.string.favourites)) },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Favorite,
-                            contentDescription = null)
+                            contentDescription = null
+                        )
                     }
                 )
 
@@ -99,38 +99,49 @@ fun MainContent() {
 
         }) { innerPadding ->
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)) {
+            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
+        ) {
 
             if (currentScreen == Screens.CurrentWeather) {
 
                 if (!locationWeatherData.updated) {
                     CircularProgressIndicator()
-                }
-                else {
+                } else {
 
-                    if(locationWeatherData.weather.error) {
-                        Text(modifier = Modifier.wrapContentSize()
-                            .padding(horizontal = 24.dp),
+                    if (locationWeatherData.weather.error) {
+                        Text(
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(horizontal = 24.dp),
                             text = locationWeatherData.weather.errorMsg,
-                            textAlign = TextAlign.Center)
-                    }
-                    else {
-                        Column(modifier = Modifier.wrapContentSize(),
-                            horizontalAlignment = Alignment.Start) {
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        Column(
+                            modifier = Modifier.wrapContentSize(),
+                            horizontalAlignment = Alignment.Start
+                        ) {
 
-                            Text(text = locationWeatherData.currentDateTime.day.plus(" ${locationWeatherData.currentDateTime.date}")
-                                .plus(" ${locationWeatherData.currentDateTime.time}"))
-                            Text(text = locationWeatherData.weather.name,
+                            Text(
+                                text = locationWeatherData.currentDateTime.day.plus(" ${locationWeatherData.currentDateTime.date}")
+                                    .plus(" ${locationWeatherData.currentDateTime.time}")
+                            )
+                            Text(
+                                text = locationWeatherData.weather.name,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black,)
-                            Row(modifier = Modifier.wrapContentWidth(),
+                                color = Color.Black,
+                            )
+                            Row(
+                                modifier = Modifier.wrapContentWidth(),
                                 horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically) {
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
 
 
                                 AsyncImage(
@@ -140,8 +151,10 @@ fun MainContent() {
                                 )
 
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = locationWeatherData.temp,
-                                    fontSize = 22.sp)
+                                Text(
+                                    text = locationWeatherData.temp,
+                                    fontSize = 22.sp
+                                )
 
                             }
                         }
@@ -151,11 +164,12 @@ fun MainContent() {
                 }
 
 
-            }
-            else if (currentScreen == Screens.FavouritePlaces){
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Red))
+            } else if (currentScreen == Screens.FavouritePlaces) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Red)
+                )
             }
         }
 

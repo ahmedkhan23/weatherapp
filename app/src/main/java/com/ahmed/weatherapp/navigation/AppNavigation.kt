@@ -2,7 +2,6 @@ package com.ahmed.weatherapp.navigation
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +11,6 @@ import com.ahmed.weatherapp.view.Splash
 
 @Composable
 fun AppNavigation() {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val navController = rememberNavController()
     var splashShown = false

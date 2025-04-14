@@ -11,6 +11,10 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
+val json = Json {
+    ignoreUnknownKeys = true
+}
+
 val appModules = module {
 
     viewModel { LocationViewModel(get()) }
@@ -18,7 +22,7 @@ val appModules = module {
     single {
         Retrofit.Builder()
             .addConverterFactory(
-                Json.asConverterFactory(contentType = "application/json".toMediaType())
+                json.asConverterFactory(contentType = "application/json".toMediaType())
             )
             .baseUrl("https://api.openweathermap.org/")
             .build()
