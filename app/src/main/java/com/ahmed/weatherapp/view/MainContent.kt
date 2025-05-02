@@ -165,11 +165,12 @@ fun MainContent() {
 
 
             } else if (currentScreen == Screens.FavouritePlaces) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Red)
-                )
+                TabsWithPager()
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.Red)
+//                )
             }
         }
 

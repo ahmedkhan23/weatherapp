@@ -55,6 +55,19 @@ class LocationWeatherRepositoryImpl(
             return NetworkResult.Error(context.getString(R.string.location_retrieve_error))
         }
 
+        val allWeatherResponse = weatherAPI.getAllWeather(
+            lat = location.latitude.toString(),
+            lon = location.longitude.toString(),
+            appid = BuildConfig.WEATHER_API_KEY
+        )
+
+        if (allWeatherResponse.isSuccessful) {
+            Log.d(TAG, allWeatherResponse.body().toString())
+        }
+
+
+
+
         return try {
             val weatherResponse = weatherAPI.getCurrentWeather(location.latitude.toString(),
                 location.longitude.toString(), BuildConfig.WEATHER_API_KEY)
