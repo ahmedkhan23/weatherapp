@@ -51,6 +51,7 @@ fun MainContent() {
     var currentScreen by remember { mutableStateOf<Screens>(Screens.CurrentWeather) }
     val locationViewModel = koinViewModel<LocationViewModel>()
     val locationWeatherData by locationViewModel.locationDataState.collectAsStateWithLifecycle()
+    val currentAndForecastWeather by locationViewModel.currentAndForecastState.collectAsStateWithLifecycle()
 
     DisposableEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.addObserver(locationViewModel)
@@ -165,12 +166,7 @@ fun MainContent() {
 
 
             } else if (currentScreen == Screens.FavouritePlaces) {
-                TabsWithPager()
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .background(Color.Red)
-//                )
+//                CurrentAndForecastedWeather(currentAndForecastWeather)
             }
         }
 

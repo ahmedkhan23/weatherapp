@@ -10,6 +10,7 @@ import com.ahmed.weatherapp.data.LocationWeatherRepository
 import com.ahmed.weatherapp.data.NetworkResult
 import com.ahmed.weatherapp.data.model.Weather
 import com.ahmed.weatherapp.data.model.WeatherResponse
+import com.ahmed.weatherapp.domain.CompactWeatherData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,18 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
     private val _locationDataState = MutableStateFlow(LocationWeatherData())
     val locationDataState = _locationDataState.asStateFlow()
 
+
+    private val _currentAndForecastState = MutableStateFlow(CurrentWeatherAndForecast())
+    val currentAndForecastState = _currentAndForecastState.asStateFlow()
+
+    /**
+     * Fetches the current weather data and updates the state with the retrieved information.
+     *
+     * The function handles the following:
+     * - Fetching weather data using the repository.
+     * - Updating the state with the retrieved weather data, formatted temperature, and icon URL on success.
+     * - Updating the state with an error message and dummy weather data on failure.
+     */
     fun getCurrentWeather() {
         viewModelScope.launch() {
             when (val weatherResponse = withContext(dispatcher) {
@@ -57,6 +70,33 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
 
     }
 
+    /**
+     * Fetches the current and forecasted weather data and updates the state with the retrieved information.
+     *
+     * The function handles the following:
+     * - Fetching current and forecasted weather data using the repository.
+     * - Updating the state with the retrieved data on success.
+     * - Updating the state with an empty list on failure.
+     */
+    private fun getCurrentAndForecastedWeather() {
+        viewModelScope.launch {
+            val currentAndForecastWeatherResponse = locationRepository.getLocationWeatherAndForecast()
+
+            when (currentAndForecastWeatherResponse) {
+                is NetworkResult.Success -> {
+                    _currentAndForecastState.update { it.copy(currentWeatherAndForecast = currentAndForecastWeatherResponse.data, updated = true) }
+                }
+
+                is NetworkResult.Error -> {
+                    _currentAndForecastState.update {
+                        it.copy(currentWeatherAndForecast = emptyList(), updated = true)
+                    }
+
+                }
+            }
+        }
+    }
+
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
         Log.d(TAG, "${this@LocationViewModel::class.java.name} onPause")
@@ -70,6 +110,7 @@ class LocationViewModel(private val locationRepository: LocationWeatherRepositor
             it.copy(weather = WeatherResponse.dummy(), updated = false, currentDateTime = FormattedDateAndTime(), iconUrl = "")
         }
         getCurrentWeather()
+        getCurrentAndForecastedWeather()
     }
 }
 
@@ -80,6 +121,11 @@ data class LocationWeatherData(
     var currentDateTime: FormattedDateAndTime = getCurrentDateAndTime(),
     var temp: String = getFormattedTempCelcius(weather.main.temp),
     var iconUrl: String = ""
+)
+
+data class CurrentWeatherAndForecast(
+    val currentWeatherAndForecast: List<CompactWeatherData> = emptyList(),
+    val updated: Boolean = false
 )
 
 fun getCurrentDateAndTime(): FormattedDateAndTime {
